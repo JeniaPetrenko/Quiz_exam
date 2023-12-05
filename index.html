@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz_Ukraine</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <div id="quiz-container">
+      <h1>Quiz</h1>
+      <h2>Quick facts about Ukraine</h2>
+      <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod hic esse
+        molestias. Doloribus eveniet non molestias quas exercitationem a amet
+        aliquid deserunt, dolores explicabo officia iusto, eligendi nemo, quidem
+        odio?
+      </p>
+      <div id="question-container"></div>
+      <form id="quiz-form">
+        <!-- Button to start the Quiz -->
+        <button type=" startBtn" onclick="startTheQuiz()">Let's Start</button>
+        <!-- Button to go to the next question -->
+        <button type="showBtn" onclick="showNextQuestion()">
+          Next Question
+        </button>
+
+        <!-- Result display area -->
+        <div class="result" id="result"></div>
+      </form>
+    </div>
+  </body>
+</html>
