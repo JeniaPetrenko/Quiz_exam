@@ -1,4 +1,5 @@
 # Quiz_exam
+
 You have been given the task of creating a quiz application for NAkademin. Users must be able to answer questions and receive feedback on whether they have answered them correctly or incorrectly. The application should work without any major bugs. You choose which questions the quiz will consist of.
 You must also have your project on Github and push up code continuously during the course of the project
 
@@ -36,6 +37,7 @@ The user must be able to see exactly which questions he answered correctly and/o
 
 Technical requirement: The code follows the "DRY" principle (Dont repeat yourself), avoids major repetitions of code in the logic.
 
- 
-
 Bonus: Try styling the quiz with CSS to make it look a little more user-friendly!
+
+My source
+https://simplestepscode.com/javascript-quiz-tutorial/#step1

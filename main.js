@@ -99,3 +99,79 @@ const quizQuestions = [
   },
   // Add more questions as needed
 ];
+
+// Dark mode
+let btn = document.querySelector("#darkMode");
+// click
+btn.addEventListener("click", toggleDarkMode);
+//variable for the current mode
+let isDarkMode = false;
+
+// function to change the mode
+function toggleDarkMode() {
+  // find the button in "container"
+  let quizContainer = document.querySelector("#quiz-container");
+  // change the mode
+  isDarkMode = !isDarkMode;
+
+  // to apply the variables
+  if (isDarkMode) {
+    quizContainer.style.background = "black";
+    quizContainer.style.color = "white";
+    // change the text of button
+    btn.textContent = "Light mode";
+  } else {
+    // Light mode
+    quizContainer.style.background = ""; // value by default
+    quizContainer.style.color = "";
+    // change the text on button
+    btn.textContent = "Dark mode";
+  }
+}
+
+// Function to show questions
+function showQuestions() {
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+
+  // Create a div to hold the question
+  const questionDiv = document.createElement("div");
+  questionDiv.innerHTML = `<p>${currentQuestion.question}</p>`;
+
+  // Create radio buttons or checkboxes for each answer choice
+  currentQuestion.options.forEach((option, index) => {
+    const inputType =
+      currentQuestion.type === "checkbox" ? "checkbox" : "radio";
+    const input = document.createElement("input");
+    input.type = inputType;
+    input.name = `question${currentQuestionIndex}`;
+    input.value = option;
+    input.id = `q${currentQuestionIndex}Option${index}`;
+
+    const label = document.createElement("label");
+    label.textContent = option;
+    label.htmlFor = input.id;
+
+    questionDiv.appendChild(input);
+    questionDiv.appendChild(label);
+    questionDiv.appendChild(document.createElement("br"));
+  });
+
+  // Append the question div to the question container
+  questionContainer.innerHTML = "";
+  questionContainer.appendChild(questionDiv);
+}
+
+// Example usage of the showQuestions function
+const quizContainer = document.getElementById("quiz-container");
+const questionContainer = document.getElementById("question-container");
+const resultContainer = document.getElementById("result");
+const submitButton = document.getElementById("submit-button");
+
+generateQuiz(
+  quizQuestions,
+  quizContainer,
+  questionContainer,
+  resultContainer,
+  submitButton
+);
+showQuestions(); // Initial call to display the first question
