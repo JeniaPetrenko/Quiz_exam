@@ -206,8 +206,7 @@ function showNextQuestion() {
 
   // Check if the selected answer is correct
   const isCorrect =
-    selectedAnswer.value ===
-    (quizQuestions[currentQuestionIndex].answer ? "true" : "false");
+    selectedAnswer.value === String(quizQuestions[currentQuestionIndex].answer);
 
   // Increment the correctAnswers count if the answer is correct
   if (isCorrect) {
