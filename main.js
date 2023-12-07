@@ -135,7 +135,7 @@ const startButton = document.getElementById("startBtn");
 const nextButton = document.getElementById("showBtn");
 const questionContainer = document.getElementById("question-container");
 const resultContainer = document.getElementById("result");
-
+const onlyStartPage = document.getElementById("onlyStartPage");
 // Функція для виведення питання
 function showQuestion() {
   const currentQuestion = quizQuestions[currentQuestionIndex];
