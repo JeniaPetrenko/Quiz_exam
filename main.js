@@ -183,38 +183,70 @@ function startTheQuiz() {
   startButton.style.display = "none";
   // Показати кнопку "Next Question"
   nextButton.style.display = "block";
+  //сховати параграф при запуску
+  onlyStartPage.style.display = "none";
 
   // Показати перше питання
   showQuestion();
 }
 
-// Функція для виведення наступного питання
+//variable to store the number of correct answers
+let correctAnswer = 0;
+
+// to show next question
 function showNextQuestion() {
-  // Отримати вибрану відповідь
+  // get the selected answer
   const selectedAnswer = document.querySelector('input[name="answer"]:checked');
 
-  // Перевірити, чи вибрано відповідь
+  // Check if an answer is selected
   if (!selectedAnswer) {
     resultContainer.innerHTML = "Please select an answer.";
     return;
   }
 
-  // Перевірити, чи відповідь вірна
+  // Check if the selected answer is correct
   const isCorrect =
     selectedAnswer.value ===
     (quizQuestions[currentQuestionIndex].answer ? "true" : "false");
 
-  // Вивести результат
-  resultContainer.innerHTML = isCorrect ? "Correct!" : "Incorrect.";
+  // Increment the correctAnswers count if the answer is correct
+  if (isCorrect) {
+    correctAnswer++;
+  }
+  // resultContainer.innerHTML = isCorrect ? "Correct!" : "Incorrect.";
 
-  // Збільшити поточний індекс питання
+  // Increment the current question index
   currentQuestionIndex++;
 
-  // Вивести наступне питання або завершити опитування
+  // Check if there are more questions
   if (currentQuestionIndex < quizQuestions.length) {
+    // Display the next question
     showQuestion();
   } else {
-    // Приховати кнопку "Next Question", якщо опитування завершено
-    nextButton.style.display = "none";
+    // All questions have been answered, display the result
+    displayResult();
   }
+}
+
+//function for result
+function displayResult() {
+  //percentage of correct answers
+  const percentage = (correctAnswer / quizQuestions.length) * 100;
+
+  //color results based on percentage
+  let resultMessage, resultColor;
+  if (percentage < 50) {
+    resultMessage = "Fail";
+    resultColor = "red";
+  } else if (percentage >= 50 && percentage <= 75) {
+    resultMessage = "Good";
+    resultColor = "orange";
+  } else {
+    resultMessage = "Really good job";
+    resultColor = "green";
+  }
+
+  // Show the message with results (corrected the variable name)
+  resultContainer.innerHTML = `<p style="color: ${resultColor};">${resultMessage}</p>`;
+  resultContainer.style.display = "block";
 }
