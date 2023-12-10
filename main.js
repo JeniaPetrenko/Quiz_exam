@@ -140,19 +140,18 @@ showResultButton.addEventListener("click", showResults);
 
 // function to start the quiz
 function startTheQuiz() {
-  // Сховати  "Let's Start" після початку опитування
+  // hide  "Let's Start"
   startButton.style.display = "none";
-  // Показати  "Next Question"
+  // show  "Next Question"
   nextButton.style.display = "block";
-
-  // Показати перше питання
+  // show the first question
   showQuestion();
 }
 
 //variable to store the number of correct answers
 let correctAnswer = 0;
 
-// Функція для виведення питання
+// display the question
 function showQuestion() {
   const currentQuestion = quizQuestions[currentQuestionIndex];
 
@@ -206,7 +205,7 @@ function showNextQuestion() {
 
     // Increment the correctAnswers count if the answer is correct
     if (isCorrect) {
-      correctAnswer++;
+      correctAnswer = correctAnswer + 1;
     }
 
     // Increment the current question index
@@ -223,9 +222,7 @@ function showNextQuestion() {
     }
   } else {
     // Display an error message or handle the case where no answer is selected
-    console.error(
-      "Please select an answer before moving to the next question."
-    );
+    alert("Please select an answer before moving to the next question.");
   }
 }
 
@@ -235,6 +232,7 @@ function showResults() {
   const selectedAnswers = document.querySelectorAll(
     'input[name="answer"]:checked'
   );
+  console.log("selected answer", selectedAnswers);
 
   // Variable to store the number of correct answers
   let correctAnswers = 0;
@@ -248,8 +246,11 @@ function showResults() {
       if (isCorrect) {
         correctAnswers++;
       }
-    } else {
-      // For other question types, compare string values
+    } else if (
+      currentQuestion.type === "multiple-choice" ||
+      currentQuestion.type === "checkbox"
+    ) {
+      // For multiple-choice and checkbox questions, compare string values
       const isCorrect = selectedAnswer.value === currentQuestion.answer;
       if (isCorrect) {
         correctAnswers++;
