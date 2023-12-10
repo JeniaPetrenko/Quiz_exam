@@ -12,7 +12,7 @@
       <h1>Quiz</h1>
       <button id="darkMode">Dark mode</button>
 
-      <h2 id="onlyStartPage">Quick facts about Ukraine</h2>
+      <h2>Quick facts about Ukraine</h2>
 
       <div id="question-container"></div>
       <form id="quiz-form">
@@ -21,7 +21,12 @@
           Let's Start
         </button>
         <!-- Button to go to the next question -->
-        <button type="button" id="showBtn" onclick="showNextQuestion()">
+        <button
+          type="button"
+          id="showBtn"
+          onclick="showNextQuestion()"
+          style="display: none"
+        >
           Next Question
         </button>
         <!-- Result display area -->
@@ -30,7 +35,7 @@
         <button
           type="button"
           id="showResultBtn"
-          onclick="displayResult()"
+          onclick="showResults()"
           style="display: none"
         >
           Show Result

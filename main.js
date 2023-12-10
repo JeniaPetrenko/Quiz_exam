@@ -135,15 +135,30 @@ const startButton = document.getElementById("startBtn");
 const nextButton = document.getElementById("showBtn");
 const questionContainer = document.getElementById("question-container");
 const resultContainer = document.getElementById("result");
-const onlyStartPage = document.getElementById("onlyStartPage");
+const showResultButton = document.getElementById("showResultBtn");
+showResultButton.addEventListener("click", showResults);
+
+// function to start the quiz
+function startTheQuiz() {
+  // Сховати  "Let's Start" після початку опитування
+  startButton.style.display = "none";
+  // Показати  "Next Question"
+  nextButton.style.display = "block";
+
+  // Показати перше питання
+  showQuestion();
+}
+
+//variable to store the number of correct answers
+let correctAnswer = 0;
+
 // Функція для виведення питання
 function showQuestion() {
   const currentQuestion = quizQuestions[currentQuestionIndex];
 
-  // Спробуйте змінити innerHTML на innerText, якщо у вас виникають проблеми
   questionContainer.innerHTML = `<p>${currentQuestion.question}</p>`;
 
-  // Очистити результат, якщо він вже виведено
+  // Очистити результат, якщо він вже виведено, коли виведено нове питання
   resultContainer.innerHTML = "";
 
   // Якщо тип питання "true/false", вивести варіанти відповідей
@@ -167,7 +182,7 @@ function showQuestion() {
     });
   } else if (currentQuestion.type === "checkbox") {
     // Якщо тип питання "checkbox", вивести варіанти відповідей
-    currentQuestion.options.forEach((option, index) => {
+    currentQuestion.options.forEach((option) => {
       questionContainer.innerHTML += `
         <label>
           <input type="checkbox" name="answer" value="${option}"> ${option}
@@ -177,65 +192,75 @@ function showQuestion() {
   }
 }
 
-// Функція для запуску опитування
-function startTheQuiz() {
-  // Сховати кнопку "Let's Start" після початку опитування
-  startButton.style.display = "none";
-  // Показати кнопку "Next Question"
-  nextButton.style.display = "block";
-  //сховати параграф при запуску
-  onlyStartPage.style.display = "none";
-
-  // Показати перше питання
-  showQuestion();
-}
-
-//variable to store the number of correct answers
-let correctAnswer = 0;
-
 // to show next question
 function showNextQuestion() {
   // get the selected answer
   const selectedAnswer = document.querySelector('input[name="answer"]:checked');
 
   // Check if an answer is selected
-  if (!selectedAnswer) {
-    resultContainer.innerHTML = "Please select an answer.";
-    return;
-  }
+  if (selectedAnswer) {
+    // Check if the selected answer is correct
+    const isCorrect =
+      selectedAnswer.value ===
+      String(quizQuestions[currentQuestionIndex].answer);
 
-  // Check if the selected answer is correct
-  const isCorrect =
-    selectedAnswer.value === String(quizQuestions[currentQuestionIndex].answer);
+    // Increment the correctAnswers count if the answer is correct
+    if (isCorrect) {
+      correctAnswer++;
+    }
 
-  // Increment the correctAnswers count if the answer is correct
-  if (isCorrect) {
-    correctAnswer++;
-  }
-  // resultContainer.innerHTML = isCorrect ? "Correct!" : "Incorrect.";
+    // Increment the current question index
+    currentQuestionIndex++;
 
-  // Increment the current question index
-  currentQuestionIndex++;
-
-  // Check if there are more questions
-  if (currentQuestionIndex < quizQuestions.length - 1) {
-    // Display the next question
-    showQuestion();
+    // Check if there are more questions
+    if (currentQuestionIndex < quizQuestions.length) {
+      // Display the next question
+      showQuestion();
+    } else {
+      //reached the last question, hide next button and show result button
+      nextButton.style.display = "none";
+      document.getElementById("showResultBtn").style.display = "block";
+    }
   } else {
-    //reached the last question, hide next button ans show result button
-    nextButton.style.display = "none";
-    document.getElementById("showResultBtn").style.display = "block";
-    // // All questions have been answered, display the result
-    // displayResult();
+    // Display an error message or handle the case where no answer is selected
+    console.error(
+      "Please select an answer before moving to the next question."
+    );
   }
 }
 
-//function for result
-function displayResult() {
-  //percentage of correct answers
-  const percentage = (correctAnswer / quizQuestions.length) * 100;
+// Function for result
+function showResults() {
+  // Find all selected answers
+  const selectedAnswers = document.querySelectorAll(
+    'input[name="answer"]:checked'
+  );
 
-  //color results based on percentage
+  // Variable to store the number of correct answers
+  let correctAnswers = 0;
+
+  selectedAnswers.forEach((selectedAnswer, index) => {
+    const currentQuestion = quizQuestions[index];
+
+    if (currentQuestion.type === "true/false") {
+      // For true/false questions, compare boolean values
+      const isCorrect = selectedAnswer.value === String(currentQuestion.answer);
+      if (isCorrect) {
+        correctAnswers++;
+      }
+    } else {
+      // For other question types, compare string values
+      const isCorrect = selectedAnswer.value === currentQuestion.answer;
+      if (isCorrect) {
+        correctAnswers++;
+      }
+    }
+  });
+
+  // Calculate the percentage of correct answers
+  const percentage = (correctAnswers / quizQuestions.length) * 100;
+
+  // Display the result message
   let resultMessage, resultColor;
   if (percentage < 50) {
     resultMessage = "Fail";
@@ -248,10 +273,9 @@ function displayResult() {
     resultColor = "green";
   }
 
-  //result message
-  const resultText = `${resultMessage}: ${correctAnswer} out of ${quizQuestions.length} questions.`;
+  const resultText = `${resultMessage}: ${correctAnswers} out of ${quizQuestions.length} questions.`;
 
-  // Show the message with results (corrected the variable name)
+  // Show the message with results
   resultContainer.innerHTML = `<p style="color: ${resultColor};">${resultText}</p>`;
   resultContainer.style.display = "block";
 }
