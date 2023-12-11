@@ -14,41 +14,21 @@ const quizQuestions = [
     question: "The official language of Ukraine is Russian.",
     answer: false,
   },
-  {
-    type: "true/false",
-    question: "Ukraine gained independence from the Soviet Union in 1991.",
-    answer: true,
-  },
-  {
-    type: "true/false",
-    question:
-      "Chernobyl, the site of a nuclear disaster, is located in Ukraine.",
-    answer: true,
-  },
+
   {
     type: "multiple-choice",
     question: "What is the official language of Ukraine?",
     options: ["Ukrainian", "Russian", "Polish", "English"],
     answer: "Ukrainian",
   },
-  {
-    type: "multiple-choice",
-    question: "Which river is the longest entirely within Ukraine?",
-    options: ["Dnieper", "Danube", "Volga", "Don"],
-    answer: "Dnieper",
-  },
+
   {
     type: "multiple-choice",
     question: "When did Ukraine host the Eurovision Song Contest?",
     options: ["2004", "2012", "2017", "2021"],
     answer: "2017",
   },
-  {
-    type: "multiple-choice",
-    question: "What is the currency of Ukraine?",
-    options: ["Euro", "Hryvnia", "Zloty", "Kuna"],
-    answer: "Hryvnia",
-  },
+
   {
     type: "multiple-choice",
     question: 'Which Ukrainian boxer is known as "Dr. Ironfist"?',
@@ -60,12 +40,7 @@ const quizQuestions = [
     ],
     answer: "Vitali Klitschko",
   },
-  {
-    type: "checkbox",
-    question: "Which of the following are Eastern European countries?",
-    options: ["Ukraine", "France", "Italy", "Poland"],
-    answer: ["Ukraine", "Poland"],
-  },
+
   {
     type: "checkbox",
     question: "Select the neighboring countries of Ukraine.",
@@ -79,12 +54,7 @@ const quizQuestions = [
     options: ["Kyiv", "Barcelona", "Lviv", "Warsaw"],
     answer: ["Kyiv", "Lviv"],
   },
-  {
-    type: "checkbox",
-    question: "Select the Ukrainian composers.",
-    options: ["Mozart", "Tchaikovsky", "Shostakovich", "Lysenko"],
-    answer: ["Tchaikovsky", "Lysenko"],
-  },
+
   {
     type: "checkbox",
     question: "Choose the Ukrainian historical figures.",
@@ -115,7 +85,7 @@ function toggleDarkMode() {
 
   // to apply the variables
   if (isDarkMode) {
-    quizContainer.style.background = "black";
+    quizContainer.style.background = "grey";
     quizContainer.style.color = "white";
     // change the text of button
     btn.textContent = "Light mode";
@@ -172,7 +142,7 @@ function showQuestion() {
     `;
   } else if (currentQuestion.type === "multiple-choice") {
     // Якщо тип питання "multiple-choice", вивести варіанти відповідей
-    currentQuestion.options.forEach((option, index) => {
+    currentQuestion.options.forEach((option) => {
       questionContainer.innerHTML += `
         <label>
           <input type="radio" name="answer" value="${option}"> ${option}
@@ -206,6 +176,9 @@ function showNextQuestion() {
     // Increment the correctAnswers count if the answer is correct
     if (isCorrect) {
       correctAnswer = correctAnswer + 1;
+      console.log("correct");
+    } else {
+      console.log("noncorrect");
     }
 
     // Increment the current question index
@@ -244,7 +217,7 @@ function showResults() {
       // For true/false questions, compare boolean values
       const isCorrect = selectedAnswer.value === String(currentQuestion.answer);
       if (isCorrect) {
-        correctAnswers++;
+        correctAnswer++;
       }
     } else if (
       currentQuestion.type === "multiple-choice" ||
@@ -253,13 +226,13 @@ function showResults() {
       // For multiple-choice and checkbox questions, compare string values
       const isCorrect = selectedAnswer.value === currentQuestion.answer;
       if (isCorrect) {
-        correctAnswers++;
+        correctAnswer++;
       }
     }
   });
 
   // Calculate the percentage of correct answers
-  const percentage = (correctAnswers / quizQuestions.length) * 100;
+  const percentage = (correctAnswer / quizQuestions.length) * 100;
 
   // Display the result message
   let resultMessage, resultColor;
@@ -274,7 +247,7 @@ function showResults() {
     resultColor = "green";
   }
 
-  const resultText = `${resultMessage}: ${correctAnswers} out of ${quizQuestions.length} questions.`;
+  const resultText = `${resultMessage}: ${correctAnswer} out of ${quizQuestions.length} questions.`;
 
   // Show the message with results
   resultContainer.innerHTML = `<p style="color: ${resultColor};">${resultText}</p>`;
