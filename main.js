@@ -14,6 +14,11 @@ const quizQuestions = [
     question: "The official language of Ukraine is Russian.",
     answer: false,
   },
+  {
+    type: "true/false",
+    question: "Is there a village in Ukraine where ethnic Swedes still live?.",
+    answer: true,
+  },
 
   {
     type: "multiple-choice",
@@ -43,12 +48,14 @@ const quizQuestions = [
 
   {
     type: "checkbox",
+    class: "answer-checkbox",
     question: "Select the neighboring countries of Ukraine.",
     options: ["Russia", "Germany", "Belarus", "Romania"],
     answer: ["Russia", "Belarus", "Romania"],
   },
   {
     type: "checkbox",
+    class: "answer-checkbox",
     question:
       "Which cities hosted matches during the UEFA Euro 2012 held in Ukraine?",
     options: ["Kyiv", "Barcelona", "Lviv", "Warsaw"],
@@ -57,6 +64,7 @@ const quizQuestions = [
 
   {
     type: "checkbox",
+    class: "answer-checkbox",
     question: "Choose the Ukrainian historical figures.",
     options: [
       "Ivan the Terrible",
@@ -97,8 +105,10 @@ function toggleDarkMode() {
     btn.textContent = "Dark mode";
   }
 }
+
 // Оголошення змінних та початкового індексу питання
 let currentQuestionIndex = 0;
+let correctAnswers = 0; // Змінив назву змінної для зберігання кількості правильних відповідей
 
 // Знаходження елементів DOM
 const startButton = document.getElementById("startBtn");
@@ -106,6 +116,11 @@ const nextButton = document.getElementById("showBtn");
 const questionContainer = document.getElementById("question-container");
 const resultContainer = document.getElementById("result");
 const showResultButton = document.getElementById("showResultBtn");
+
+// Додавання слухача подій для кнопки "Let's Start"
+startButton.addEventListener("click", startTheQuiz);
+// Додавання слухача подій для кнопки "Next Question"
+nextButton.addEventListener("click", showNextQuestion);
 showResultButton.addEventListener("click", showResults);
 
 // function to start the quiz
@@ -118,64 +133,37 @@ function startTheQuiz() {
   showQuestion();
 }
 
-//variable to store the number of correct answers
-let correctAnswer = 0;
-
-// display the question
-function showQuestion() {
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-
-  questionContainer.innerHTML = `<p>${currentQuestion.question}</p>`;
-
-  // Очистити результат, якщо він вже виведено, коли виведено нове питання
-  resultContainer.innerHTML = "";
-
-  // Якщо тип питання "true/false", вивести варіанти відповідей
-  if (currentQuestion.type === "true/false") {
-    questionContainer.innerHTML += `
-      <label>
-        <input type="radio" name="answer" value="true"> True
-      </label>
-      <label>
-        <input type="radio" name="answer" value="false"> False
-      </label>
-    `;
-  } else if (currentQuestion.type === "multiple-choice") {
-    // Якщо тип питання "multiple-choice", вивести варіанти відповідей
-    currentQuestion.options.forEach((option) => {
-      questionContainer.innerHTML += `
-        <label>
-          <input type="radio" name="answer" value="${option}"> ${option}
-        </label>
-      `;
-    });
-  } else if (currentQuestion.type === "checkbox") {
-    // Якщо тип питання "checkbox", вивести варіанти відповідей
-    currentQuestion.options.forEach((option) => {
-      questionContainer.innerHTML += `
-        <label>
-          <input type="checkbox" name="answer" value="${option}"> ${option}
-        </label>
-      `;
-    });
-  }
-}
-
 // to show next question
 function showNextQuestion() {
-  // get the selected answer
-  const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+  // get the selected answers
+  const selectedAnswers = document.querySelectorAll(
+    'input[name="answer"]:checked'
+  );
 
-  // Check if an answer is selected
-  if (selectedAnswer) {
-    // Check if the selected answer is correct
-    const isCorrect =
-      selectedAnswer.value ===
-      String(quizQuestions[currentQuestionIndex].answer);
+  // Check if at least one answer is selected
+  if (selectedAnswers.length > 0) {
+    // Check if the selected answers are correct based on question type
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    let isCorrect;
+
+    if (
+      currentQuestion.type === "true/false" ||
+      currentQuestion.type === "multiple-choice"
+    ) {
+      // For true/false and multiple-choice, compare with the single correct answer
+      isCorrect = selectedAnswers[0].value === String(currentQuestion.answer);
+    } else if (currentQuestion.type === "checkbox") {
+      // For checkbox, compare arrays of selected values and correct options
+      const correctOptions = currentQuestion.answer;
+      const selectedValues = Array.from(selectedAnswers).map(
+        (input) => input.value
+      );
+      isCorrect = arraysEqual(selectedValues, correctOptions);
+    }
 
     // Increment the correctAnswers count if the answer is correct
     if (isCorrect) {
-      correctAnswer = correctAnswer + 1;
+      correctAnswers++;
       console.log("correct");
     } else {
       console.log("noncorrect");
@@ -189,19 +177,77 @@ function showNextQuestion() {
       // Display the next question
       showQuestion();
     } else {
-      //reached the last question, hide next button and show result button
+      // reached the last question, hide next button and show result button
       nextButton.style.display = "none";
-      document.getElementById("showResultBtn").style.display = "block";
+      showResultButton.style.display = "block";
+    }
+  } else {
+    // Display an error message or handle the case where no answer is selected
+    alert(
+      "Please select at least one answer before moving to the next question."
+    );
+  }
+}
+
+// Function to display the question
+function showQuestion() {
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+
+  questionContainer.innerHTML = `<p>${currentQuestion.question}</p>`;
+
+  // Clear the result if it has been displayed when a new question is shown
+  resultContainer.innerHTML = "";
+
+  // If the question type is "true/false", display answer options
+  if (currentQuestion.type === "true/false") {
+    questionContainer.innerHTML += `
+      <label>
+        <input type="radio" name="answer" value="true"> True
+      </label>
+      <label>
+        <input type="radio" name="answer" value="false"> False
+      </label>
+    `;
+  } else if (currentQuestion.type === "multiple-choice") {
+    // If the question type is "multiple-choice", display answer options
+    currentQuestion.options.forEach((option) => {
+      questionContainer.innerHTML += `
+        <label>
+          <input type="radio"  name="answer" value="${option}"> ${option}
+        </label>
+      `;
+    });
+  } else if (currentQuestion.type === "checkbox") {
+    // If the question type is "checkbox", display answer options
+    currentQuestion.options.forEach((option) => {
+      questionContainer.innerHTML += `
+        <label>
+          <input type="checkbox" name="answer" value="${option}"> ${option}
+        </label>
+      `;
+    });
+  }
+}
+
+// Function to compare two arrays
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
     }
   } else {
     // Display an error message or handle the case where no answer is selected
     alert("Please select an answer before moving to the next question.");
   }
+  return true;
 }
 
-// Function for result
+// Function to display results
 function showResults() {
-  // Find all selected answers
+  //  Find all selected answers
   const selectedAnswers = document.querySelectorAll(
     'input[name="answer"]:checked'
   );
@@ -236,10 +282,10 @@ function showResults() {
 
   // Display the result message
   let resultMessage, resultColor;
-  if (percentage < 50) {
+  if (correctAnswers < 3) {
     resultMessage = "Fail";
     resultColor = "red";
-  } else if (percentage >= 50 && percentage <= 75) {
+  } else if (correctAnswers >= 3 && correctAnswers <= 6) {
     resultMessage = "Good";
     resultColor = "orange";
   } else {
@@ -247,7 +293,7 @@ function showResults() {
     resultColor = "green";
   }
 
-  const resultText = `${resultMessage}: ${correctAnswer} out of ${quizQuestions.length} questions.`;
+  const resultText = `${resultMessage}: ${correctAnswers} out of ${quizQuestions.length} questions.`;
 
   // Show the message with results
   resultContainer.innerHTML = `<p style="color: ${resultColor};">${resultText}</p>`;
