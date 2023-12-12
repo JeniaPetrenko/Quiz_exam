@@ -238,9 +238,6 @@ function arraysEqual(arr1, arr2) {
     if (arr1[i] !== arr2[i]) {
       return false;
     }
-  } else {
-    // Display an error message or handle the case where no answer is selected
-    alert("Please select an answer before moving to the next question.");
   }
   return true;
 }
@@ -252,33 +249,6 @@ function showResults() {
     'input[name="answer"]:checked'
   );
   console.log("selected answer", selectedAnswers);
-
-  // Variable to store the number of correct answers
-  let correctAnswers = 0;
-
-  selectedAnswers.forEach((selectedAnswer, index) => {
-    const currentQuestion = quizQuestions[index];
-
-    if (currentQuestion.type === "true/false") {
-      // For true/false questions, compare boolean values
-      const isCorrect = selectedAnswer.value === String(currentQuestion.answer);
-      if (isCorrect) {
-        correctAnswer++;
-      }
-    } else if (
-      currentQuestion.type === "multiple-choice" ||
-      currentQuestion.type === "checkbox"
-    ) {
-      // For multiple-choice and checkbox questions, compare string values
-      const isCorrect = selectedAnswer.value === currentQuestion.answer;
-      if (isCorrect) {
-        correctAnswer++;
-      }
-    }
-  });
-
-  // Calculate the percentage of correct answers
-  const percentage = (correctAnswer / quizQuestions.length) * 100;
 
   // Display the result message
   let resultMessage, resultColor;
