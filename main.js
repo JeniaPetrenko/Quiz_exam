@@ -161,7 +161,7 @@ function showNextQuestion() {
       isCorrect = arraysEqual(selectedValues, correctOptions);
     }
 
-    // Increment the correctAnswers count if the answer is correct
+    // check if the answer is correct is counted
     if (isCorrect) {
       correctAnswers++;
       console.log("correct");
@@ -250,12 +250,14 @@ function showResults() {
   );
   console.log("selected answer", selectedAnswers);
 
+  // calculate the percentage of correct answers
+  const percentage = (correctAnswers / quizQuestions.length) * 100;
   // Display the result message
   let resultMessage, resultColor;
-  if (correctAnswers < 3) {
+  if (percentage < 50) {
     resultMessage = "Fail";
     resultColor = "red";
-  } else if (correctAnswers >= 3 && correctAnswers <= 6) {
+  } else if (percentage >= 50 && percentage <= 75) {
     resultMessage = "Good";
     resultColor = "orange";
   } else {
