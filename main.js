@@ -13,11 +13,11 @@ const quizQuestions = [
   {
     type: "true/false",
     question: "Ukraine is a country with a territory larger than Russia.",
-    answer: true,
+    answer: false,
   },
   {
     type: "true/false",
-    question: "Is there a village in Ukraine where ethnic Swedes still live?.",
+    question: "Is there a village in Ukraine where ethnic Swedes still live?",
     answer: true,
   },
 
