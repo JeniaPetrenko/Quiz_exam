@@ -95,7 +95,6 @@ const startAgainButton = document.getElementById("startAgainBtn");
 // Додавання слухача подій для кнопки "Let's Start", "Next Question", "Dark mode"
 btn.addEventListener("click", toggleDarkMode);
 startButton.addEventListener("click", startTheQuiz);
-// Додавання слухача подій для кнопки "Next Question"
 nextButton.addEventListener("click", showNextQuestion);
 showResultButton.addEventListener("click", showResults);
 startAgainButton.addEventListener("click", startAgain);
