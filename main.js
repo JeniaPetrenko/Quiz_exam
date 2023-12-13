@@ -77,51 +77,40 @@ const quizQuestions = [
   // Add more questions as needed
 ];
 
-// Dark mode
-let btn = document.querySelector("#darkMode");
-// click
-btn.addEventListener("click", toggleDarkMode);
-//variable for the current mode
-let isDarkMode = false;
-
-// function to change the mode
-function toggleDarkMode() {
-  // find the button in "container"
-  let quizContainer = document.querySelector("#quiz-container");
-  // change the mode
-  isDarkMode = !isDarkMode;
-
-  // to apply the variables
-  if (isDarkMode) {
-    quizContainer.style.background = "grey";
-    quizContainer.style.color = "white";
-    // change the text of button
-    btn.textContent = "Light mode";
-  } else {
-    // Light mode
-    quizContainer.style.background = ""; // value by default
-    quizContainer.style.color = "";
-    // change the text on button
-    btn.textContent = "Dark mode";
-  }
-}
-
 // Оголошення змінних та початкового індексу питання
+let isDarkMode = false;
 let currentQuestionIndex = 0;
 let correctAnswers = 0; // Змінив назву змінної для зберігання кількості правильних відповідей
 
 // Знаходження елементів DOM
+const btn = document.querySelector("#darkMode");
+const quizContainer = document.querySelector("#quiz-container");
 const startButton = document.getElementById("startBtn");
 const nextButton = document.getElementById("showBtn");
 const questionContainer = document.getElementById("question-container");
 const resultContainer = document.getElementById("result");
 const showResultButton = document.getElementById("showResultBtn");
+const startAgainButton = document.getElementById("startAgainBtn");
 
-// Додавання слухача подій для кнопки "Let's Start"
+// Додавання слухача подій для кнопки "Let's Start", "Next Question", "Dark mode"
+btn.addEventListener("click", toggleDarkMode);
 startButton.addEventListener("click", startTheQuiz);
 // Додавання слухача подій для кнопки "Next Question"
 nextButton.addEventListener("click", showNextQuestion);
 showResultButton.addEventListener("click", showResults);
+startAgainButton.addEventListener("click", startAgain);
+
+// Dark mode
+// function to change the mode
+function toggleDarkMode() {
+  isDarkMode = !isDarkMode;
+  const bgColor = isDarkMode ? "grey" : "";
+  const textColor = isDarkMode ? "white" : "";
+
+  quizContainer.style.background = bgColor;
+  quizContainer.style.color = textColor;
+  btn.textContent = isDarkMode ? "Light mode" : "Dark mode";
+}
 
 // function to start the quiz
 function startTheQuiz() {
@@ -155,13 +144,14 @@ function showNextQuestion() {
     } else if (currentQuestion.type === "checkbox") {
       // For checkbox, compare arrays of selected values and correct options
       const correctOptions = currentQuestion.answer;
-      const selectedValues = Array.from(selectedAnswers).map(
+      const selectedValues = Array.from(
+        selectedAnswers,
         (input) => input.value
       );
       isCorrect = arraysEqual(selectedValues, correctOptions);
     }
 
-    // check if the answer is correct is counted
+    // check if the answer is counted
     if (isCorrect) {
       correctAnswers++;
       console.log("correct");
@@ -198,6 +188,10 @@ function showQuestion() {
   // Clear the result if it has been displayed when a new question is shown
   resultContainer.innerHTML = "";
 
+  //to hide question-container
+  questionContainer.style.display = "none";
+  resultContainer.style.display = "none";
+
   // If the question type is "true/false", display answer options
   if (currentQuestion.type === "true/false") {
     questionContainer.innerHTML += `
@@ -226,6 +220,16 @@ function showQuestion() {
         </label>
       `;
     });
+  }
+  //if it's the last question to display "start again" question
+  if (currentQuestionIndex === quizQuestions.length - 1) {
+    startAgainButton.style.display = "block";
+    //hide the "next question"
+    nextButton.style.display = "none";
+    //show result button
+    showResultButton.style.display = "block";
+  } else {
+    questionContainer.style.display = "block";
   }
 }
 
@@ -269,5 +273,18 @@ function showResults() {
 
   // Show the message with results
   resultContainer.innerHTML = `<p style="color: ${resultColor};">${resultText}</p>`;
+  //to show result-container and hide question container
+  questionContainer.style.display = "none";
   resultContainer.style.display = "block";
+  //show the "start again" button
+  startAgainButton.style.display = "block";
+}
+//start again function
+function startAgain() {
+  currentQuestionIndex = 0;
+  correctAnswers = 0;
+  nextButton.style.display = "block";
+  showResultButton.style.display = "none";
+  startAgainButton.style.display = "none";
+  showQuestion();
 }

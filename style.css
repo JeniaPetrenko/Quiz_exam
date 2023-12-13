@@ -5,7 +5,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url(/quiz_draft/draft/img/polina-rytova-1dGMs4hhcVA-unsplash.jpg);
+    background-image: url(/Quiz_exam/img/polina-rytova-1dGMs4hhcVA-unsplash.jpg);
     background-size: cover;
     background-position: center;
     font-family: 'Arial', sans
@@ -22,7 +22,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: 4px;
     box-shadow: 0 0.4rem 1.4rem 0 rgb(213, 213, 223);
     text-align: center;
 
@@ -44,19 +44,22 @@ body {
 
 #startBtn,
 #showBtn,
-#showResultBtn {
+#showResultBtn,
+#startAgainBtn {
     display: block;
     margin: 10px 0;
     padding: 10px 20px;
     background-color: #4285f4;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-#showBtn:hover {
-    background-color: #4CAF50;
+#showBtn:hover,
+#startAgainBtn:hover,
+#showResultBtn:hover {
+    background-color: #e8ef08;
     color: white;
     cursor: pointer;
 
@@ -71,4 +74,19 @@ body {
     display: none;
 }
 
-/* Додайте цей код в style.css */
+@media (max-width: 768px) {
+    html {
+        font-size: 17px;
+    }
+
+    .quiz-container form h1 {
+        font-size: 1.5rem;
+    }
+
+    .question-container {
+        margin-bottom: 20px;
+        justify-content: center;
+        text-align: center;
+
+    }
+}
