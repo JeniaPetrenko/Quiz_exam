@@ -1,18 +1,19 @@
 const quizQuestions = [
   {
     type: "true/false",
-    question: "Kyiv is the capital of Ukraine.",
-    answer: true,
-  },
-  {
-    type: "true/false",
     question: "Ukraine is the largest country entirely in Europe.",
     answer: true,
   },
   {
     type: "true/false",
-    question: "The official language of Ukraine is Russian.",
-    answer: false,
+    question: "The largest solar power plant in Europe is located in Ukraine.",
+    answer: true,
+  },
+
+  {
+    type: "true/false",
+    question: "Ukraine is a country with a territory larger than Russia.",
+    answer: true,
   },
   {
     type: "true/false",
@@ -29,9 +30,9 @@ const quizQuestions = [
 
   {
     type: "multiple-choice",
-    question: "When did Ukraine host the Eurovision Song Contest?",
-    options: ["2004", "2012", "2017", "2021"],
-    answer: "2017",
+    question: "How many times has Ukraine won the Eurovision Song Contest?",
+    options: ["never", "one", "two", "three"],
+    answer: "three",
   },
 
   {
@@ -49,9 +50,10 @@ const quizQuestions = [
   {
     type: "checkbox",
     class: "answer-checkbox",
-    question: "Select the neighboring countries of Ukraine.",
-    options: ["Russia", "Germany", "Belarus", "Romania"],
-    answer: ["Russia", "Belarus", "Romania"],
+    question:
+      "Which of the following years were the years of Eurovision in Ukraine?",
+    options: ["2000", "2005", "2017", "2022"],
+    answer: ["2005", "2017"],
   },
   {
     type: "checkbox",
@@ -61,18 +63,13 @@ const quizQuestions = [
     options: ["Kyiv", "Barcelona", "Lviv", "Warsaw"],
     answer: ["Kyiv", "Lviv"],
   },
-
   {
     type: "checkbox",
     class: "answer-checkbox",
-    question: "Choose the Ukrainian historical figures.",
-    options: [
-      "Ivan the Terrible",
-      "Taras Shevchenko",
-      "Catherine the Great",
-      "Bohdan Khmelnytsky",
-    ],
-    answer: ["Taras Shevchenko", "Bohdan Khmelnytsky"],
+    question:
+      "Which of the following dishes are traditional in Ukrainian cuisine?",
+    options: ["Sushi", "Bortsh", "Vareniks (dumplings)", "Pasta"],
+    answer: ["Bortsh", "Vareniks (dumplings)"],
   },
   // Add more questions as needed
 ];
@@ -223,13 +220,8 @@ function showQuestion() {
   //if it's the last question to display "start again" question
   if (currentQuestionIndex === quizQuestions.length - 1) {
     startAgainButton.style.display = "block";
-    //hide the "next question"
-    nextButton.style.display = "none";
-    //show result button
-    showResultButton.style.display = "block";
-  } else {
-    questionContainer.style.display = "block";
   }
+  questionContainer.style.display = "block";
 }
 
 // Function to compare two arrays
