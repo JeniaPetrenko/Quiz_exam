@@ -34,7 +34,14 @@ const quizQuestions = [
     options: ["never", "one", "two", "three"],
     answer: "three",
   },
-
+ {
+    type: "checkbox",
+    class: "answer-checkbox",
+    question:
+      "Which of the following years were the years of Eurovision in Ukraine?",
+    options: ["2000", "2005", "2017", "2022"],
+    answer: ["2005", "2017"],
+  },
   {
     type: "multiple-choice",
     question: 'Which Ukrainian boxer is known as "Dr. Ironfist"?',
@@ -175,6 +182,19 @@ function showNextQuestion() {
   }
 }
 
+// Function to compare two arrays
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 // Function to display the question
 function showQuestion() {
   const currentQuestion = quizQuestions[currentQuestionIndex];
@@ -222,19 +242,6 @@ function showQuestion() {
     startAgainButton.style.display = "block";
   }
   questionContainer.style.display = "block";
-}
-
-// Function to compare two arrays
-function arraysEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-  return true;
 }
 
 // Function to display results
