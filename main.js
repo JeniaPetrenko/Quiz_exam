@@ -34,11 +34,11 @@ const quizQuestions = [
     options: ["never", "one", "two", "three"],
     answer: "three",
   },
- {
+  {
     type: "checkbox",
     class: "answer-checkbox",
     question:
-      "Which of the following years were the years of Eurovision in Ukraine?",
+      "Which of the following years were the years of Eurovision in Ukraine? (choose more than one answer)",
     options: ["2000", "2005", "2017", "2022"],
     answer: ["2005", "2017"],
   },
@@ -58,15 +58,7 @@ const quizQuestions = [
     type: "checkbox",
     class: "answer-checkbox",
     question:
-      "Which of the following years were the years of Eurovision in Ukraine?",
-    options: ["2000", "2005", "2017", "2022"],
-    answer: ["2005", "2017"],
-  },
-  {
-    type: "checkbox",
-    class: "answer-checkbox",
-    question:
-      "Which cities hosted matches during the UEFA Euro 2012 held in Ukraine?",
+      "Which cities hosted matches during the UEFA Euro 2012 held in Ukraine? (choose more than one question",
     options: ["Kyiv", "Barcelona", "Lviv", "Warsaw"],
     answer: ["Kyiv", "Lviv"],
   },
@@ -74,7 +66,7 @@ const quizQuestions = [
     type: "checkbox",
     class: "answer-checkbox",
     question:
-      "Which of the following dishes are traditional in Ukrainian cuisine?",
+      "Which of the following dishes are traditional in Ukrainian cuisine? (choose more than one quesiton",
     options: ["Sushi", "Bortsh", "Vareniks (dumplings)", "Pasta"],
     answer: ["Bortsh", "Vareniks (dumplings)"],
   },
