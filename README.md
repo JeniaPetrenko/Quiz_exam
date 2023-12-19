@@ -38,6 +38,3 @@ The user must be able to see exactly which questions he answered correctly and/o
 Technical requirement: The code follows the "DRY" principle (Dont repeat yourself), avoids major repetitions of code in the logic.
 
 Bonus: Try styling the quiz with CSS to make it look a little more user-friendly!
-
-My source
-https://simplestepscode.com/javascript-quiz-tutorial/#step1
