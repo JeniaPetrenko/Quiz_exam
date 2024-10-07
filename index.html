@@ -8,27 +8,52 @@
     <script src="main.js" defer></script>
   </head>
   <body>
-    <div id="quiz-container">
+    <div id="quiz-container" role="main" aria-live="polite">
       <h1>Quiz 🇺🇦</h1>
-      <button id="darkMode">Dark mode</button>
+      <button id="darkMode" aria-label="Toggle dark mode">Dark mode</button>
 
       <h2>Quick facts about Ukraine</h2>
 
-      <div id="question-container"></div>
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+
+      <div id="question-container" aria-atomic="true"></div>
       <form id="quiz-form">
-        <!-- Button to start the Quiz -->
-        <button type="button" id="startBtn">Let's Start</button>
-        <!-- Button to go to the next question -->
-        <button type="button" id="showBtn" style="display: none">
+        <button type="button" id="startBtn" aria-label="Start the quiz">
+          Let's Start
+        </button>
+        <button
+          type="button"
+          id="showBtn"
+          style="display: none"
+          aria-label="Next question"
+        >
           Next Question
         </button>
-        <!-- Result display area -->
-        <div class="result" id="result"></div>
-        <!--butoon to show result-->
-        <button type="button" id="showResultBtn" style="display: none">
+        <div class="result" id="result" aria-live="assertive"></div>
+        <button
+          type="button"
+          id="showResultBtn"
+          style="display: none"
+          aria-label="Show quiz results"
+        >
           Show Result
         </button>
-        <button type="button" id="startAgainBtn" style="display: none">
+        <button
+          type="button"
+          id="showAnswersBtn"
+          style="display: none"
+          aria-label="Show correct answers"
+        >
+          Show Answers
+        </button>
+        <button
+          type="button"
+          id="startAgainBtn"
+          style="display: none"
+          aria-label="Restart the quiz"
+        >
           Start Again
         </button>
       </form>

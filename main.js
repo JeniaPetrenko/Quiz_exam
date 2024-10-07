@@ -9,7 +9,6 @@ const quizQuestions = [
     question: "The largest solar power plant in Europe is located in Ukraine.",
     answer: true,
   },
-
   {
     type: "true/false",
     question: "Ukraine is a country with a territory larger than Russia.",
@@ -20,14 +19,12 @@ const quizQuestions = [
     question: "Is there a village in Ukraine where ethnic Swedes still live?",
     answer: true,
   },
-
   {
     type: "multiple-choice",
     question: "What is the official language of Ukraine?",
     options: ["Ukrainian", "Russian", "Polish", "English"],
     answer: "Ukrainian",
   },
-
   {
     type: "multiple-choice",
     question: "How many times has Ukraine won the Eurovision Song Contest?",
@@ -53,12 +50,11 @@ const quizQuestions = [
     ],
     answer: "Vitali Klitschko",
   },
-
   {
     type: "checkbox",
     class: "answer-checkbox",
     question:
-      "Which cities hosted matches during the UEFA Euro 2012 held in Ukraine? (choose more than one question",
+      "Which cities hosted matches during the UEFA Euro 2012 held in Ukraine? (choose more than one question)",
     options: ["Kyiv", "Barcelona", "Lviv", "Warsaw"],
     answer: ["Kyiv", "Lviv"],
   },
@@ -66,19 +62,16 @@ const quizQuestions = [
     type: "checkbox",
     class: "answer-checkbox",
     question:
-      "Which of the following dishes are traditional in Ukrainian cuisine? (choose more than one quesiton",
+      "Which of the following dishes are traditional in Ukrainian cuisine? (choose more than one quesiton)",
     options: ["Sushi", "Bortsh", "Vareniks (dumplings)", "Pasta"],
     answer: ["Bortsh", "Vareniks (dumplings)"],
   },
-  // Add more questions as needed
 ];
 
-// Оголошення змінних та початкового індексу питання
 let isDarkMode = false;
 let currentQuestionIndex = 0;
-let correctAnswers = 0; // Змінив назву змінної для зберігання кількості правильних відповідей
+let correctAnswers = 0;
 
-// Знаходження елементів DOM
 const btn = document.querySelector("#darkMode");
 const quizContainer = document.querySelector("#quiz-container");
 const startButton = document.getElementById("startBtn");
@@ -87,16 +80,23 @@ const questionContainer = document.getElementById("question-container");
 const resultContainer = document.getElementById("result");
 const showResultButton = document.getElementById("showResultBtn");
 const startAgainButton = document.getElementById("startAgainBtn");
+const progressBar = document.getElementById("progress-bar");
+const showAnswersButton = document.getElementById("showAnswersBtn");
 
-// Додавання слухача подій для кнопки "Let's Start", "Next Question", "Dark mode"
 btn.addEventListener("click", toggleDarkMode);
 startButton.addEventListener("click", startTheQuiz);
 nextButton.addEventListener("click", showNextQuestion);
 showResultButton.addEventListener("click", showResults);
 startAgainButton.addEventListener("click", startAgain);
+showResultButton.addEventListener("click", showResults);
+showAnswersButton.addEventListener("click", showAnswers);
+startAgainButton.addEventListener("click", startAgain);
 
-// Dark mode
-// function to change the mode
+function handleError(message) {
+  console.error(message);
+  alert(`An error occurred: ${message}`);
+}
+
 function toggleDarkMode() {
   isDarkMode = !isDarkMode;
   const bgColor = isDarkMode ? "grey" : "";
@@ -107,26 +107,18 @@ function toggleDarkMode() {
   btn.textContent = isDarkMode ? "Light mode" : "Dark mode";
 }
 
-// function to start the quiz
 function startTheQuiz() {
-  // hide  "Let's Start"
   startButton.style.display = "none";
-  // show  "Next Question"
   nextButton.style.display = "block";
-  // show the first question
   showQuestion();
 }
 
-// to show next question
 function showNextQuestion() {
-  // get the selected answers
   const selectedAnswers = document.querySelectorAll(
     'input[name="answer"]:checked'
   );
 
-  // Check if at least one answer is selected
   if (selectedAnswers.length > 0) {
-    // Check if the selected answers are correct based on question type
     const currentQuestion = quizQuestions[currentQuestionIndex];
     let isCorrect;
 
@@ -134,10 +126,8 @@ function showNextQuestion() {
       currentQuestion.type === "true/false" ||
       currentQuestion.type === "multiple-choice"
     ) {
-      // For true/false and multiple-choice, compare with the single correct answer
       isCorrect = selectedAnswers[0].value === String(currentQuestion.answer);
     } else if (currentQuestion.type === "checkbox") {
-      // For checkbox, compare arrays of selected values and correct options
       const correctOptions = currentQuestion.answer;
       const selectedValues = Array.from(
         selectedAnswers,
@@ -146,108 +136,96 @@ function showNextQuestion() {
       isCorrect = arraysEqual(selectedValues, correctOptions);
     }
 
-    // check if the answer is counted
     if (isCorrect) {
       correctAnswers++;
-      console.log("correct");
-    } else {
-      console.log("noncorrect");
     }
 
-    // Increment the current question index
     currentQuestionIndex++;
 
-    // Check if there are more questions
     if (currentQuestionIndex < quizQuestions.length) {
-      // Display the next question
       showQuestion();
     } else {
-      // reached the last question, hide next button and show result button
       nextButton.style.display = "none";
       showResultButton.style.display = "block";
     }
+    updateProgressBar();
   } else {
-    // Display an error message or handle the case where no answer is selected
     alert(
       "Please select at least one answer before moving to the next question."
     );
   }
 }
 
-// Function to compare two arrays
 function arraysEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-// Function to display the question
-function showQuestion() {
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-
-  questionContainer.innerHTML = `<p>${currentQuestion.question}</p>`;
-
-  // Clear the result if it has been displayed when a new question is shown
-  resultContainer.innerHTML = "";
-
-  //to hide question-container
-  questionContainer.style.display = "none";
-  resultContainer.style.display = "none";
-
-  // If the question type is "true/false", display answer options
-  if (currentQuestion.type === "true/false") {
-    questionContainer.innerHTML += `
-      <label>
-        <input type="radio" name="answer" value="true"> True
-      </label>
-      <label>
-        <input type="radio" name="answer" value="false"> False
-      </label>
-    `;
-  } else if (currentQuestion.type === "multiple-choice") {
-    // If the question type is "multiple-choice", display answer options
-    currentQuestion.options.forEach((option) => {
-      questionContainer.innerHTML += `
-        <label>
-          <input type="radio"  name="answer" value="${option}"> ${option}
-        </label>
-      `;
-    });
-  } else if (currentQuestion.type === "checkbox") {
-    // If the question type is "checkbox", display answer options
-    currentQuestion.options.forEach((option) => {
-      questionContainer.innerHTML += `
-        <label>
-          <input type="checkbox" name="answer" value="${option}"> ${option}
-        </label>
-      `;
-    });
-  }
-  //if it's the last question to display "start again" question
-  if (currentQuestionIndex === quizQuestions.length - 1) {
-    startAgainButton.style.display = "block";
-  }
-  questionContainer.style.display = "block";
-}
-
-// Function to display results
-function showResults() {
-  //  Find all selected answers
-  const selectedAnswers = document.querySelectorAll(
-    'input[name="answer"]:checked'
+  if (arr1.length !== arr2.length) return false;
+  const set1 = new Set(arr1);
+  const set2 = new Set(arr2);
+  return (
+    arr1.every((item) => set2.has(item)) && arr2.every((item) => set1.has(item))
   );
-  console.log("selected answer", selectedAnswers);
+}
 
-  // calculate the percentage of correct answers
+function showQuestion() {
+  try {
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+
+    questionContainer.innerHTML = `<p>${currentQuestion.question}</p>`;
+    resultContainer.innerHTML = "";
+
+    questionContainer.style.display = "block";
+    resultContainer.style.display = "none";
+
+    if (currentQuestion.type === "true/false") {
+      questionContainer.innerHTML += `
+        <div class="options true-false-options">
+          <div class="option-wrapper">
+            <input type="radio" id="true" name="answer" value="true">
+            <label for="true">True</label>
+          </div>
+          <div class="option-wrapper">
+            <input type="radio" id="false" name="answer" value="false">
+            <label for="false">False</label>
+          </div>
+        </div>
+      `;
+    } else if (currentQuestion.type === "multiple-choice") {
+      questionContainer.innerHTML += `<div class="options multiple-choice-options">`;
+      currentQuestion.options.forEach((option, index) => {
+        questionContainer.innerHTML += `
+          <div class="option-wrapper">
+            <input type="radio" id="option${index}" name="answer" value="${option}">
+            <label for="option${index}">${option}</label>
+          </div>
+        `;
+      });
+      questionContainer.innerHTML += `</div>`;
+    } else if (currentQuestion.type === "checkbox") {
+      questionContainer.innerHTML += `<div class="options checkbox-options">`;
+      currentQuestion.options.forEach((option, index) => {
+        questionContainer.innerHTML += `
+          <div class="option-wrapper">
+            <input type="checkbox" id="option${index}" name="answer" value="${option}">
+            <label for="option${index}">${option}</label>
+          </div>
+        `;
+      });
+      questionContainer.innerHTML += `</div>`;
+    }
+
+    if (currentQuestionIndex === quizQuestions.length - 1) {
+      startAgainButton.style.display = "block";
+    }
+
+    updateProgressBar();
+  } catch (error) {
+    handleError(error.message);
+  }
+}
+
+function showResults() {
   const percentage = (correctAnswers / quizQuestions.length) * 100;
-  // Display the result message
   let resultMessage, resultColor;
+
   if (percentage < 50) {
     resultMessage = "Fail";
     resultColor = "red";
@@ -261,20 +239,51 @@ function showResults() {
 
   const resultText = `${resultMessage}: ${correctAnswers} out of ${quizQuestions.length} questions.`;
 
-  // Show the message with results
   resultContainer.innerHTML = `<p style="color: ${resultColor};">${resultText}</p>`;
-  //to show result-container and hide question container
   questionContainer.style.display = "none";
   resultContainer.style.display = "block";
-  //show the "start again" button
+  showResultButton.style.display = "none";
+  showAnswersButton.style.display = "block";
   startAgainButton.style.display = "block";
 }
-//start again function
+
+function showAnswers() {
+  questionContainer.innerHTML = "";
+  quizQuestions.forEach((question, index) => {
+    let answerHtml = "";
+    if (question.type === "true/false" || question.type === "multiple-choice") {
+      answerHtml = `<p>Answer: ${question.answer}</p>`;
+    } else if (question.type === "checkbox") {
+      answerHtml = `<p>Answers: ${question.answer.join(", ")}</p>`;
+    }
+
+    questionContainer.innerHTML += `
+      <div class="question-answer">
+        <h3>Question ${index + 1}:</h3>
+        <p>${question.question}</p>
+        ${answerHtml}
+      </div>
+    `;
+  });
+
+  resultContainer.style.display = "none";
+  questionContainer.style.display = "block";
+  showAnswersButton.style.display = "none";
+}
+
 function startAgain() {
   currentQuestionIndex = 0;
   correctAnswers = 0;
   nextButton.style.display = "block";
   showResultButton.style.display = "none";
+  showAnswersButton.style.display = "none";
   startAgainButton.style.display = "none";
   showQuestion();
+  updateProgressBar();
+}
+
+function updateProgressBar() {
+  const progressPercentage =
+    (currentQuestionIndex / quizQuestions.length) * 100;
+  progressBar.style.width = `${progressPercentage}%`;
 }
